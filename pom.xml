@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>else</artifactId>
+	<groupId>com.gullerya</groupId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<properties>
+
+		<!--EXTERNALS-->
+		<slf4j>1.7.29</slf4j>
+
+		<!--BUILD-->
+		<java>1.8</java>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven-clean-plugin>3.1.0</maven-clean-plugin>
+		<maven-resources-plugin>3.1.0</maven-resources-plugin>
+		<maven-compiler-plugin>3.8.1</maven-compiler-plugin>
+		<maven-jar-plugin>3.1.2</maven-jar-plugin>
+		<maven-source-plugin>3.0.1</maven-source-plugin>
+		<maven-install-plugin>3.0.0-M1</maven-install-plugin>
+
+		<!--QUALITY-->
+		<maven-enforcer-plugin>3.0.0-M2</maven-enforcer-plugin>
+		<maven-surefire-plugin>3.0.0-M3</maven-surefire-plugin>
+		<spotbugs>3.1.11</spotbugs>
+		<junit>4.12</junit>
+		<jacoco-maven-plugin>0.8.4</jacoco-maven-plugin>
+
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<artifactId>slf4j-api</artifactId>
+				<groupId>org.slf4j</groupId>
+				<version>${slf4j}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+
+		<dependency>
+			<artifactId>slf4j-api</artifactId>
+			<groupId>org.slf4j</groupId>
+		</dependency>
+
+		<!--QUALITY-->
+		<dependency>
+			<artifactId>junit</artifactId>
+			<groupId>junit</groupId>
+			<version>${junit}</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+
+				<!--BUILD-->
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<groupId>org.apache.maven.plugins</groupId>
+					<version>${maven-clean-plugin}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<groupId>org.apache.maven.plugins</groupId>
+					<version>${maven-resources-plugin}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<groupId>org.apache.maven.plugins</groupId>
+					<version>${maven-compiler-plugin}</version>
+					<configuration>
+						<source>${java}</source>
+						<target>${java}</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<groupId>org.apache.maven.plugins</groupId>
+					<version>${maven-jar-plugin}</version>
+					<configuration>
+						<archive>
+							<addMavenDescriptor>false</addMavenDescriptor>
+							<manifest>
+								<addDefaultEntries>false</addDefaultEntries>
+							</manifest>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-source-plugin</artifactId>
+					<groupId>org.apache.maven.plugins</groupId>
+					<version>${maven-source-plugin}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<groupId>org.apache.maven.plugins</groupId>
+					<version>${maven-install-plugin}</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<groupId>org.apache.maven.plugins</groupId>
+					<version>${maven-enforcer-plugin}</version>
+				</plugin>
+				<plugin>
+					<artifactId>spotbugs-maven-plugin</artifactId>
+					<groupId>com.github.spotbugs</groupId>
+					<version>${spotbugs}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<groupId>org.apache.maven.plugins</groupId>
+					<version>${maven-surefire-plugin}</version>
+				</plugin>
+				<plugin>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<groupId>org.jacoco</groupId>
+					<version>${jacoco-maven-plugin}</version>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<executions>
+					<execution>
+						<id>enforce</id>
+						<configuration>
+							<rules>
+								<dependencyConvergence/>
+							</rules>
+						</configuration>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<groupId>com.github.spotbugs</groupId>
+				<configuration>
+					<effort>max</effort>
+					<maxRank>20</maxRank>
+					<excludeFilterFile>src/test/resources/spotbugs-excludes.xml</excludeFilterFile>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<artifactId>spotbugs</artifactId>
+						<groupId>com.github.spotbugs</groupId>
+						<version>${spotbugs}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>jacoco-coverage</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<groupId>org.jacoco</groupId>
+						<executions>
+							<execution>
+								<id>prepare-agent</id>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>report</id>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>post-unit-test</id>
+								<phase>test</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+								<configuration>
+									<dataFile>target/jacoco.exec</dataFile>
+									<outputDirectory>target/jacoco-report</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>

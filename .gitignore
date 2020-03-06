@@ -1,0 +1,13 @@
+# IntelliJ
+.idea/
+**/*.iml
+
+# VS Code
+.vscode/
+.settings/
+.classpath
+.project
+
+# Build artifacts
+**/target/
+**/logs
