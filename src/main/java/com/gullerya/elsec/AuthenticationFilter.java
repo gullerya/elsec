@@ -10,10 +10,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AuthenticationFilter implements Filter {
-    private static SecurityServiceImpl securityService;
+    private static final String SERVICE_PARAM_KEY = "securityServiceKey";
+    private String securityServiceKey = SecurityFactory.DEFAULT_SEC_SER_KEY;
 
     @Override
     public void init(FilterConfig filterConfig) {
+        String sKey = filterConfig.getInitParameter(SERVICE_PARAM_KEY);
+        if (sKey != null) {
+            if (sKey.isEmpty()) {
+                throw new IllegalStateException("security service key parameter MUST NOT be EMPTY");
+            }
+            securityServiceKey = sKey;
+        }
     }
 
     @Override
@@ -21,10 +29,16 @@ public class AuthenticationFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        if (securityService == null) {
-            response.setStatus(HttpServletResponse.SC_PRECONDITION_FAILED);
-            return;
-        }
+        SecurityService securityService = SecurityFactory.getSecurityService(securityServiceKey);
+
+        //  extract cookie
+        //  get SID
+        //  lookup for session
+        //  if not present return 401
+        //  verify that session is not expired, if yes - return 401
+        //  update/refresh session if needed
+        //  create security context and put it on the request
+        //  let the flow to continue
 
         String securityCookie = SecurityUtils.retrieveSecurityCookie(request.getCookies());
         SecurityServiceImpl.ISurePrincipal securityToken;

@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 abstract public class SecurityFactory {
-    private static final String DEFAULT_SEC_SER_KEY = "default";
     private static final Map<String, SecurityService> secSers = new HashMap<>();
+    static final String DEFAULT_SEC_SER_KEY = "default";
 
     private SecurityFactory() {
     }
@@ -21,7 +21,7 @@ abstract public class SecurityFactory {
             throw new IllegalArgumentException("key MUST NOT be NULL nor EMPTY");
         }
 
-        return null;
+        return new SecurityServiceImpl(securitySPI);
     }
 
     public static SecurityService getSecurityService() {
