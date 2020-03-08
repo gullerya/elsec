@@ -9,8 +9,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.crypto.SecretKey;
 import javax.servlet.http.Cookie;
-import java.util.HashSet;
-import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration({

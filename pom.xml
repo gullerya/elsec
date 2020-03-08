@@ -10,8 +10,9 @@
 
 	<properties>
 
-		<!--EXTERNALS-->
-		<slf4j>1.7.29</slf4j>
+		<!--DEPENDENCIES-->
+		<slf4j-api>1.7.29</slf4j-api>
+		<javax-servlet-api>4.0.1</javax-servlet-api>
 
 		<!--BUILD-->
 		<java>1.8</java>
@@ -32,21 +33,17 @@
 
 	</properties>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<artifactId>slf4j-api</artifactId>
-				<groupId>org.slf4j</groupId>
-				<version>${slf4j}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<dependencies>
-
 		<dependency>
 			<artifactId>slf4j-api</artifactId>
 			<groupId>org.slf4j</groupId>
+			<version>${slf4j-api}</version>
+		</dependency>
+		<dependency>
+			<artifactId>javax.servlet-api</artifactId>
+			<groupId>javax.servlet</groupId>
+			<version>${javax-servlet-api}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!--QUALITY-->

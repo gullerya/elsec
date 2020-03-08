@@ -1,6 +1,5 @@
 package com.isure.security;
 
-import com.isure.security.api.ISureSecurityContext;
 import com.isure.security.api.UserRole;
 import org.junit.Assert;
 import org.junit.Test;

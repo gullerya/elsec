@@ -1,8 +1,7 @@
-package com.isure.security.api;
+package com.gullerya.elsec.api_old;
 
 import javax.crypto.SecretKey;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 
 public interface SecurityService {
 	String SECURITY_COOKIE_NAME = "isure.st";
