@@ -10,10 +10,13 @@ class SecurityServiceImpl implements SecurityService {
 	private final SessionsManager sessionsManager;
 	private final OTPManager otpManager;
 
-	SecurityServiceImpl(SecurityConfigurationSPI securityConfigurationSPI) {
-		principalsManager = securityConfigurationSPI.getPrincipalsManager();
-		sessionsManager = securityConfigurationSPI.getSessionsManager();
-		otpManager = securityConfigurationSPI.getOTPManager();
+	SecurityServiceImpl(SecurityConfigurationSPI securityConfiguration) {
+		if (securityConfiguration == null) {
+			throw new IllegalArgumentException("security configuration MUST NOT be NULL");
+		}
+		principalsManager = securityConfiguration.getPrincipalsManager();
+		sessionsManager = securityConfiguration.getSessionsManager();
+		otpManager = securityConfiguration.getOTPManager();
 	}
 
 	@Override

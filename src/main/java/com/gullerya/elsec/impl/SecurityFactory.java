@@ -8,17 +8,20 @@ import java.util.Map;
 
 abstract public class SecurityFactory {
 	private static final Map<String, SecurityService> secSers = new HashMap<>();
-	static final String DEFAULT_SEC_SER_KEY = "default";
 
 	private SecurityFactory() {
 	}
 
-	public static SecurityService createSecurityService() {
-		return createSecurityService(new SecurityConfigurationDefault());
-	}
+	public static SecurityService obtain(String key, SecurityConfigurationSPI configuration) {
+		if (key == null || key.isEmpty()) {
+			throw new IllegalArgumentException("key MUST NOT be NULL nor EMPTY");
+		}
 
-	public static SecurityService createSecurityService(SecurityConfigurationSPI securityConfigurationSPI) {
-		return createSecurityService(DEFAULT_SEC_SER_KEY, securityConfigurationSPI);
+		SecurityService result = secSers.get(key);
+		if (result == null) {
+			result = createSecurityService(key, configuration != null ? configuration : new SecurityConfigurationDefault());
+		}
+		return result;
 	}
 
 	public static SecurityService createSecurityService(String key, SecurityConfigurationSPI securityConfigurationSPI) {
@@ -32,10 +35,6 @@ abstract public class SecurityFactory {
 		SecurityService result = new SecurityServiceImpl(securityConfigurationSPI);
 		secSers.put(key, result);
 		return result;
-	}
-
-	public static SecurityService getSecurityService() {
-		return getSecurityService(DEFAULT_SEC_SER_KEY);
 	}
 
 	public static SecurityService getSecurityService(String key) {

@@ -10,25 +10,48 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class SecurityFilter implements Filter {
-	private static final String SERVICE_PARAM_KEY = "securityServiceKey";
-	private String securityServiceKey = SecurityFactory.DEFAULT_SEC_SER_KEY;
+	private static final String SERVICE_PARAM_KEY = "secSerKey";
+	private static final String SERVICE_CONFIG_KEY = "secSerConfig";
 
+	private SecurityService securityService;
+
+	//  TODO: here there should be a place to make it extensible (via the service key or custom configuration class
 	@Override
-	public void init(FilterConfig filterConfig) {
+	public void init(FilterConfig filterConfig) throws ServletException {
+		//  service key
 		String sKey = filterConfig.getInitParameter(SERVICE_PARAM_KEY);
 		if (sKey != null) {
 			if (sKey.isEmpty()) {
 				throw new IllegalStateException("security service key parameter MUST NOT be EMPTY");
 			}
-			securityServiceKey = sKey;
+		} else {
+			sKey = SecurityService.DEFAULT_SEC_SER_KEY;
 		}
+
+		//  service configuration
+		SecurityConfigurationSPI configuration = null;
+		String sConf = filterConfig.getInitParameter(SERVICE_CONFIG_KEY);
+		if (sConf != null) {
+			Class<SecurityConfigurationSPI> configurerClass;
+			try {
+				configurerClass = (Class<SecurityConfigurationSPI>) Class.forName(sConf);
+			} catch (ClassNotFoundException cnfe) {
+				throw new ServletException("failed to initialize configuration class '" + sConf + "'", cnfe);
+			}
+			try {
+				configuration = configurerClass.newInstance();
+			} catch (IllegalAccessException | InstantiationException iae) {
+				throw new ServletException("failed to instantiate configuration class '" + sConf + "'", iae);
+			}
+		}
+
+		securityService = SecurityFactory.obtain(sKey, configuration);
 	}
 
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
-		SecurityService securityService = SecurityFactory.getSecurityService(securityServiceKey);
 
 		SecurityContext securityContext = securityService.authenticate(request);
 		if (securityContext != null) {
