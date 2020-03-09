@@ -36,4 +36,9 @@ public class SecuritySPIDefault implements SecuritySPI {
     public OTPManager getOTPManager() {
         return otpManager;
     }
+
+    @Override
+    public String getCookieName() {
+        return "sid";
+    }
 }

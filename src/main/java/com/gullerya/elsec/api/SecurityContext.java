@@ -2,9 +2,9 @@ package com.gullerya.elsec.api;
 
 public interface SecurityContext {
 
-    Long getUserId();
+	long getUserId();
 
-    Long getUserRoles();
+	long getUserRoles();
 
-    boolean isUserInRole(Long role);
+	boolean isUserInRole(long role);
 }

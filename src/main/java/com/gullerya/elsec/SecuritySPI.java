@@ -6,9 +6,9 @@ import com.gullerya.elsec.api.SessionsManager;
 
 public interface SecuritySPI {
 
-    PrincipalsManager getPrincipalsManager();
+	PrincipalsManager getPrincipalsManager();
 
-    SessionsManager getSessionsManager();
+	SessionsManager getSessionsManager();
 
-    OTPManager getOTPManager();
+	OTPManager getOTPManager();
 }
