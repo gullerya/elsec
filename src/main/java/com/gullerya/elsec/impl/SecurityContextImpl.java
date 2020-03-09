@@ -4,11 +4,11 @@ import com.gullerya.elsec.api.SecurityContext;
 
 public class SecurityContextImpl implements SecurityContext {
 	private final long userId;
-	private final long userRoles;
+	private final long roles;
 
-	public SecurityContextImpl(long userId, long userRoles) {
+	public SecurityContextImpl(long userId, long roles) {
 		this.userId = userId;
-		this.userRoles = userRoles;
+		this.roles = roles;
 	}
 
 	@Override
@@ -17,12 +17,12 @@ public class SecurityContextImpl implements SecurityContext {
 	}
 
 	@Override
-	public long getUserRoles() {
-		return userRoles;
+	public long getRoles() {
+		return roles;
 	}
 
 	@Override
 	public boolean isUserInRole(long role) {
-		return (userRoles & role) > 0;
+		return (roles & role) > 0;
 	}
 }

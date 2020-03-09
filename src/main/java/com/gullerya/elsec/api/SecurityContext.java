@@ -4,7 +4,7 @@ public interface SecurityContext {
 
 	long getUserId();
 
-	long getUserRoles();
+	long getRoles();
 
 	boolean isUserInRole(long role);
 }
