@@ -4,13 +4,13 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface SecurityService {
 
-    void login();
+    SecurityContext authenticate(HttpServletRequest request);
 
-    void logout();
+    boolean authorize(HttpServletRequest request, SecurityContext securityContext);
+
+    SecurityContext getContext(HttpServletRequest request);
 
     void createOTP();
 
     void verifyOTP();
-
-    SecurityContext getContext(HttpServletRequest request);
 }

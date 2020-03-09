@@ -1,24 +1,24 @@
 package com.gullerya.elsec.impl;
 
-import com.gullerya.elsec.SecuritySPI;
+import com.gullerya.elsec.SecurityConfigurationSPI;
 import com.gullerya.elsec.api.OTPManager;
 import com.gullerya.elsec.api.PrincipalsManager;
 import com.gullerya.elsec.api.SessionsManager;
 
-public class SecuritySPIDefault implements SecuritySPI {
+public class SecurityConfigurationDefault implements SecurityConfigurationSPI {
     private final PrincipalsManager principalsManager;
     private final SessionsManager sessionsManager;
     private final OTPManager otpManager;
 
-    public SecuritySPIDefault() {
+    protected SecurityConfigurationDefault() {
         principalsManager = new PrincipalsManagerImpl();
-        sessionsManager = new SessionsManagerImpl();
+        sessionsManager = new SessionsManagerImpl(this);
         otpManager = new OTPManagerImpl();
     }
 
-    private SecuritySPIDefault(SecuritySPI customSPI) {
+    private SecurityConfigurationDefault(SecurityConfigurationSPI customSPI) {
         principalsManager = customSPI.getPrincipalsManager() != null ? customSPI.getPrincipalsManager() : new PrincipalsManagerImpl();
-        sessionsManager = customSPI.getSessionsManager() != null ? customSPI.getSessionsManager() : new SessionsManagerImpl();
+        sessionsManager = customSPI.getSessionsManager() != null ? customSPI.getSessionsManager() : new SessionsManagerImpl(this);
         otpManager = customSPI.getOTPManager() != null ? customSPI.getOTPManager() : new OTPManagerImpl();
     }
 

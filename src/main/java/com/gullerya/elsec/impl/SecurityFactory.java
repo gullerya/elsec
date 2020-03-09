@@ -1,5 +1,6 @@
-package com.gullerya.elsec;
+package com.gullerya.elsec.impl;
 
+import com.gullerya.elsec.SecurityConfigurationSPI;
 import com.gullerya.elsec.api.SecurityService;
 
 import java.util.HashMap;
@@ -12,16 +13,25 @@ abstract public class SecurityFactory {
 	private SecurityFactory() {
 	}
 
-	public static SecurityService createSecurityService(SecuritySPI securitySPI) {
-		return createSecurityService(DEFAULT_SEC_SER_KEY, securitySPI);
+	public static SecurityService createSecurityService() {
+		return createSecurityService(new SecurityConfigurationDefault());
 	}
 
-	public static SecurityService createSecurityService(String key, SecuritySPI securitySPI) {
+	public static SecurityService createSecurityService(SecurityConfigurationSPI securityConfigurationSPI) {
+		return createSecurityService(DEFAULT_SEC_SER_KEY, securityConfigurationSPI);
+	}
+
+	public static SecurityService createSecurityService(String key, SecurityConfigurationSPI securityConfigurationSPI) {
 		if (key == null || key.isEmpty()) {
 			throw new IllegalArgumentException("key MUST NOT be NULL nor EMPTY");
 		}
+		if (secSers.containsKey(key)) {
+			throw new IllegalArgumentException("security service with key '" + key + "' already exists");
+		}
 
-		return new SecurityServiceImpl(securitySPI);
+		SecurityService result = new SecurityServiceImpl(securityConfigurationSPI);
+		secSers.put(key, result);
+		return result;
 	}
 
 	public static SecurityService getSecurityService() {
