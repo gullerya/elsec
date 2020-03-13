@@ -10,16 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class SecurityFilter implements Filter {
-	private static final String SERVICE_PARAM_KEY = "secSerKey";
-	private static final String SERVICE_CONFIG_KEY = "secSerConfig";
-
 	private SecurityService securityService;
 
-	//  TODO: here there should be a place to make it extensible (via the service key or custom configuration class
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		//  service key
-		String sKey = filterConfig.getInitParameter(SERVICE_PARAM_KEY);
+		String sKey = filterConfig.getInitParameter(SecurityService.SERVICE_PARAM_KEY);
 		if (sKey != null) {
 			if (sKey.isEmpty()) {
 				throw new IllegalStateException("security service key parameter MUST NOT be EMPTY");
@@ -30,7 +26,7 @@ public class SecurityFilter implements Filter {
 
 		//  service configuration
 		SecurityConfigurationSPI configuration = null;
-		String sConf = filterConfig.getInitParameter(SERVICE_CONFIG_KEY);
+		String sConf = filterConfig.getInitParameter(SecurityService.SERVICE_CONFIG_KEY);
 		if (sConf != null) {
 			Class<SecurityConfigurationSPI> configurerClass;
 			try {

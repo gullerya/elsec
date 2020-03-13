@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 abstract public class SecurityFactory {
+	private static final Object SERVICE_INIT_LOCK = new Object();
 	private static final Map<String, SecurityService> secSers = new HashMap<>();
 
 	private SecurityFactory() {
@@ -19,7 +20,11 @@ abstract public class SecurityFactory {
 
 		SecurityService result = secSers.get(key);
 		if (result == null) {
-			result = createSecurityService(key, configuration != null ? configuration : new SecurityConfigurationDefault());
+			synchronized (SERVICE_INIT_LOCK) {
+				if (!secSers.containsKey(key)) {
+					result = createSecurityService(key, configuration != null ? configuration : new SecurityConfigurationDefault());
+				}
+			}
 		}
 		return result;
 	}

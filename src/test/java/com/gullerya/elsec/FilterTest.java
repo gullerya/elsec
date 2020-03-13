@@ -1,5 +1,6 @@
 package com.gullerya.elsec;
 
+import com.gullerya.elsec.api.SecurityService;
 import org.junit.Test;
 
 import javax.servlet.Filter;
@@ -14,9 +15,11 @@ public class FilterTest {
 	@Test
 	public void testA() throws ServletException {
 		Filter f = new SecurityFilter();
-		String[][] params = {{"secSerKey", "default"}};
+		String[][] params = {{"secSerKey", SecurityService.DEFAULT_SEC_SER_KEY}};
 		FilterConfig fc = new FilterConfigTest(params);
 		f.init(fc);
+
+
 	}
 
 	private static final class FilterConfigTest extends HttpFilter {
