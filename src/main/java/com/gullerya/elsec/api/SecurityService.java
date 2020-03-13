@@ -7,7 +7,7 @@ public interface SecurityService {
 	String SERVICE_CONFIG_KEY = "secSerConfig";
 	String DEFAULT_SEC_SER_KEY = "default";
 
-	SecuritySession authenticate(HttpServletRequest request);
+	SecuritySession authenticate(HttpServletRequest request) throws Exception;
 
 	boolean authorize(HttpServletRequest request, SecuritySession securitySession);
 

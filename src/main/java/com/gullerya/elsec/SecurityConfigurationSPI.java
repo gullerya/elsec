@@ -13,4 +13,8 @@ public interface SecurityConfigurationSPI {
 	OTPManager getOTPManager();
 
 	String getCookieName();
+
+	String getPass();
+
+	String getSalt();
 }

@@ -4,5 +4,5 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface SessionsManager {
 
-	SecuritySession obtainSession(HttpServletRequest request);
+	SecuritySession obtainSession(HttpServletRequest request) throws Exception;
 }

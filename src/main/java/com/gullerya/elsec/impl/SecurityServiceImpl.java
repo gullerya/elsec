@@ -20,8 +20,8 @@ class SecurityServiceImpl implements SecurityService {
 	}
 
 	@Override
-	public SecuritySession authenticate(HttpServletRequest request) {
-		SecuritySession securitySession = sessionsManager.lookupSession(request);
+	public SecuritySession authenticate(HttpServletRequest request) throws Exception {
+		SecuritySession securitySession = sessionsManager.obtainSession(request);
 		//  put context on request
 		return null;
 	}
