@@ -1,6 +1,6 @@
 package com.gullerya.elsec;
 
-import com.gullerya.elsec.api.SecurityContext;
+import com.gullerya.elsec.api.SecuritySession;
 import com.gullerya.elsec.api.SecurityService;
 import com.gullerya.elsec.impl.SecurityFactory;
 
@@ -49,9 +49,9 @@ public class SecurityFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-		SecurityContext securityContext = securityService.authenticate(request);
-		if (securityContext != null) {
-			boolean authorized = securityService.authorize(request, securityContext);
+		SecuritySession securitySession = securityService.authenticate(request);
+		if (securitySession != null) {
+			boolean authorized = securityService.authorize(request, securitySession);
 			if (authorized) {
 				filterChain.doFilter(servletRequest, servletResponse);
 			} else {

@@ -7,11 +7,11 @@ public interface SecurityService {
 	String SERVICE_CONFIG_KEY = "secSerConfig";
 	String DEFAULT_SEC_SER_KEY = "default";
 
-	SecurityContext authenticate(HttpServletRequest request);
+	SecuritySession authenticate(HttpServletRequest request);
 
-	boolean authorize(HttpServletRequest request, SecurityContext securityContext);
+	boolean authorize(HttpServletRequest request, SecuritySession securitySession);
 
-	SecurityContext getContext(HttpServletRequest request);
+	SecuritySession getContext(HttpServletRequest request);
 
 	void createOTP();
 

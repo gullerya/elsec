@@ -1,12 +1,12 @@
 package com.gullerya.elsec.impl;
 
-import com.gullerya.elsec.api.SecurityContext;
+import com.gullerya.elsec.api.SecuritySession;
 
-public class SecurityContextImpl implements SecurityContext {
+public class SecuritySessionImpl implements SecuritySession {
 	private final long userId;
 	private final long roles;
 
-	public SecurityContextImpl(long userId, long roles) {
+	public SecuritySessionImpl(long userId, long roles) {
 		this.userId = userId;
 		this.roles = roles;
 	}

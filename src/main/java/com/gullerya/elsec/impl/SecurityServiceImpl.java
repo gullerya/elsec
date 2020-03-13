@@ -20,12 +20,14 @@ class SecurityServiceImpl implements SecurityService {
 	}
 
 	@Override
-	public SecurityContext authenticate(HttpServletRequest request) {
+	public SecuritySession authenticate(HttpServletRequest request) {
+		SecuritySession securitySession = sessionsManager.lookupSession(request);
+		//  put context on request
 		return null;
 	}
 
 	@Override
-	public boolean authorize(HttpServletRequest request, SecurityContext securityContext) {
+	public boolean authorize(HttpServletRequest request, SecuritySession securitySession) {
 		return false;
 	}
 
@@ -40,7 +42,7 @@ class SecurityServiceImpl implements SecurityService {
 	}
 
 	@Override
-	public SecurityContext getContext(HttpServletRequest request) {
+	public SecuritySession getContext(HttpServletRequest request) {
 		return null;
 	}
 }

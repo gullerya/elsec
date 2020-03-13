@@ -12,13 +12,13 @@ public class SecurityConfigurationDefault implements SecurityConfigurationSPI {
 
     protected SecurityConfigurationDefault() {
         principalsManager = new PrincipalsManagerImpl();
-        sessionsManager = new SessionsManagerImpl(this);
+        sessionsManager = new EDSessionsManagerImpl(this);
         otpManager = new OTPManagerImpl();
     }
 
     private SecurityConfigurationDefault(SecurityConfigurationSPI customSPI) {
         principalsManager = customSPI.getPrincipalsManager() != null ? customSPI.getPrincipalsManager() : new PrincipalsManagerImpl();
-        sessionsManager = customSPI.getSessionsManager() != null ? customSPI.getSessionsManager() : new SessionsManagerImpl(this);
+        sessionsManager = customSPI.getSessionsManager() != null ? customSPI.getSessionsManager() : new EDSessionsManagerImpl(this);
         otpManager = customSPI.getOTPManager() != null ? customSPI.getOTPManager() : new OTPManagerImpl();
     }
 

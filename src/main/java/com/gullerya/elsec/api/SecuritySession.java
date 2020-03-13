@@ -1,6 +1,6 @@
 package com.gullerya.elsec.api;
 
-public interface SecurityContext {
+public interface SecuritySession {
 
 	long getUserId();
 
