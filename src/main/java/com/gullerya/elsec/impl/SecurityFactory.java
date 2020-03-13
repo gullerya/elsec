@@ -29,7 +29,7 @@ abstract public class SecurityFactory {
 		return result;
 	}
 
-	public static SecurityService createSecurityService(String key, SecurityConfigurationSPI securityConfigurationSPI) {
+	private static SecurityService createSecurityService(String key, SecurityConfigurationSPI securityConfigurationSPI) {
 		if (key == null || key.isEmpty()) {
 			throw new IllegalArgumentException("key MUST NOT be NULL nor EMPTY");
 		}
@@ -40,18 +40,5 @@ abstract public class SecurityFactory {
 		SecurityService result = new SecurityServiceImpl(securityConfigurationSPI);
 		secSers.put(key, result);
 		return result;
-	}
-
-	public static SecurityService getSecurityService(String key) {
-		if (key == null || key.isEmpty()) {
-			throw new IllegalArgumentException("key MUST NOT be NULL nor EMPTY");
-		}
-
-		SecurityService result = secSers.get(key);
-		if (result == null) {
-			throw new IllegalStateException("no security service '" + key + "' present");
-		} else {
-			return result;
-		}
 	}
 }
