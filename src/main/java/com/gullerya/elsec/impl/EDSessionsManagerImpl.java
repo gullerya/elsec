@@ -35,8 +35,7 @@ class EDSessionsManagerImpl extends SessionsManagerBaseImpl {
 			passPhrase = UUID.randomUUID().toString();
 		}
 
-		byte[] salt = new byte[16];
-		key = generateKey(getPassPhrase().toCharArray(), salt, getKeyIter(), getKeySize());
+		key = generateKey(getPassPhrase().toCharArray(), new byte[32], getKeyIter(), getKeySize());
 	}
 
 	@Override
