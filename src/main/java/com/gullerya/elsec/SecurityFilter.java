@@ -41,7 +41,11 @@ public class SecurityFilter implements Filter {
 			}
 		}
 
-		securityService = SecurityFactory.obtain(sKey, configuration);
+		try {
+			securityService = SecurityFactory.obtain(sKey, configuration);
+		} catch (Exception e) {
+			throw new ServletException("failed to obtain security service", e);
+		}
 	}
 
 	@Override
@@ -49,16 +53,20 @@ public class SecurityFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-		SecuritySession securitySession = securityService.authenticate(request);
-		if (securitySession != null) {
-			boolean authorized = securityService.authorize(request, securitySession);
-			if (authorized) {
-				filterChain.doFilter(servletRequest, servletResponse);
+		try {
+			SecuritySession securitySession = securityService.authenticate(request);
+			if (securitySession != null) {
+				boolean authorized = securityService.authorize(request, securitySession);
+				if (authorized) {
+					filterChain.doFilter(servletRequest, servletResponse);
+				} else {
+					response.sendError(HttpServletResponse.SC_FORBIDDEN);
+				}
 			} else {
-				response.sendError(HttpServletResponse.SC_FORBIDDEN);
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 			}
-		} else {
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+		} catch (Exception e) {
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}
 

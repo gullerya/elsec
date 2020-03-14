@@ -6,39 +6,44 @@ import com.gullerya.elsec.api.PrincipalsManager;
 import com.gullerya.elsec.api.SessionsManager;
 
 public class SecurityConfigurationDefault implements SecurityConfigurationSPI {
-    private final PrincipalsManager principalsManager;
-    private final SessionsManager sessionsManager;
-    private final OTPManager otpManager;
+	private final PrincipalsManager principalsManager;
+	private final SessionsManager sessionsManager;
+	private final OTPManager otpManager;
 
-    protected SecurityConfigurationDefault() {
-        principalsManager = new PrincipalsManagerImpl();
-        sessionsManager = new EDSessionsManagerImpl(this);
-        otpManager = new OTPManagerImpl();
-    }
+	protected SecurityConfigurationDefault() throws Exception {
+		principalsManager = new PrincipalsManagerImpl();
+		sessionsManager = new EDSessionsManagerImpl(this);
+		otpManager = new OTPManagerImpl();
+	}
 
-    private SecurityConfigurationDefault(SecurityConfigurationSPI customSPI) {
-        principalsManager = customSPI.getPrincipalsManager() != null ? customSPI.getPrincipalsManager() : new PrincipalsManagerImpl();
-        sessionsManager = customSPI.getSessionsManager() != null ? customSPI.getSessionsManager() : new EDSessionsManagerImpl(this);
-        otpManager = customSPI.getOTPManager() != null ? customSPI.getOTPManager() : new OTPManagerImpl();
-    }
+	private SecurityConfigurationDefault(SecurityConfigurationSPI customSPI) throws Exception {
+		principalsManager = customSPI.getPrincipalsManager() != null ? customSPI.getPrincipalsManager() : new PrincipalsManagerImpl();
+		sessionsManager = customSPI.getSessionsManager() != null ? customSPI.getSessionsManager() : new EDSessionsManagerImpl(this);
+		otpManager = customSPI.getOTPManager() != null ? customSPI.getOTPManager() : new OTPManagerImpl();
+	}
 
-    @Override
-    public PrincipalsManager getPrincipalsManager() {
-        return principalsManager;
-    }
+	@Override
+	public PrincipalsManager getPrincipalsManager() {
+		return principalsManager;
+	}
 
-    @Override
-    public SessionsManager getSessionsManager() {
-        return sessionsManager;
-    }
+	@Override
+	public SessionsManager getSessionsManager() {
+		return sessionsManager;
+	}
 
-    @Override
-    public OTPManager getOTPManager() {
-        return otpManager;
-    }
+	@Override
+	public OTPManager getOTPManager() {
+		return otpManager;
+	}
 
-    @Override
-    public String getCookieName() {
-        return "sid";
-    }
+	@Override
+	public String getCookieName() {
+		return null;
+	}
+
+	@Override
+	public String getPass() {
+		return null;
+	}
 }

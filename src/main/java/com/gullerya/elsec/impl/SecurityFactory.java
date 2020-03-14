@@ -13,7 +13,7 @@ abstract public class SecurityFactory {
 	private SecurityFactory() {
 	}
 
-	public static SecurityService obtain(String key, SecurityConfigurationSPI configuration) {
+	public static SecurityService obtain(String key, SecurityConfigurationSPI configuration) throws Exception {
 		if (key == null || key.isEmpty()) {
 			throw new IllegalArgumentException("key MUST NOT be NULL nor EMPTY");
 		}

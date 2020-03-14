@@ -15,6 +15,4 @@ public interface SecurityConfigurationSPI {
 	String getCookieName();
 
 	String getPass();
-
-	String getSalt();
 }

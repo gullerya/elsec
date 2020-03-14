@@ -1,6 +1,9 @@
 package com.gullerya.elsec;
 
 import com.gullerya.elsec.api.SecurityService;
+import com.gullerya.elsec.impl.SecurityConfigurationDefault;
+import com.gullerya.elsec.impl.SecurityFactory;
+import org.junit.Assert;
 import org.junit.Test;
 
 import javax.servlet.Filter;
@@ -13,13 +16,17 @@ import java.util.Map;
 public class FilterTest {
 
 	@Test
-	public void testA() throws ServletException {
+	public void testA() throws Exception {
 		Filter f = new SecurityFilter();
-		String[][] params = {{"secSerKey", SecurityService.DEFAULT_SEC_SER_KEY}};
+		String[][] params = {
+				{SecurityService.SERVICE_PARAM_KEY, SecurityService.DEFAULT_SEC_SER_KEY},
+				{SecurityService.SERVICE_CONFIG_KEY, "com.gullerya.elsec.FilterTest$TestSecConfig"}
+		};
 		FilterConfig fc = new FilterConfigTest(params);
 		f.init(fc);
 
-
+		SecurityService securityService = SecurityFactory.obtain(SecurityService.DEFAULT_SEC_SER_KEY, null);
+		Assert.assertNotNull(securityService);
 	}
 
 	private static final class FilterConfigTest extends HttpFilter {
@@ -34,6 +41,23 @@ public class FilterTest {
 		@Override
 		public String getInitParameter(String name) {
 			return params.get(name);
+		}
+	}
+
+	private static final class TestSecConfig extends SecurityConfigurationDefault {
+
+		TestSecConfig() throws Exception {
+			super();
+		}
+
+		@Override
+		public String getPass() {
+			return "pass-phrase";
+		}
+
+		@Override
+		public String getSalt() {
+			return "salt-phrase";
 		}
 	}
 }
