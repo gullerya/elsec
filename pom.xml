@@ -5,7 +5,7 @@
 
 	<artifactId>elsec</artifactId>
 	<groupId>com.gullerya</groupId>
-	<version>1.0-SNAPSHOT</version>
+	<version>0.1</version>
 	<packaging>jar</packaging>
 
 	<name>Enterprise Level Security Easy (ELSEC)</name>
@@ -21,6 +21,22 @@
 		</license>
 	</licenses>
 
+	<developers>
+		<developer>
+			<id>gullery</id>
+			<name>Yuri Guller</name>
+			<email>gullerya@gmail.com</email>
+			<organization>GullerYA</organization>
+			<roles>
+				<role>Maintainer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<scm>
+		<url>https://github.com/gullerya/elsec</url>
+	</scm>
+
 	<properties>
 
 		<!--DEPENDENCIES-->
@@ -35,6 +51,7 @@
 		<maven-compiler-plugin>3.8.1</maven-compiler-plugin>
 		<maven-jar-plugin>3.1.2</maven-jar-plugin>
 		<maven-source-plugin>3.0.1</maven-source-plugin>
+		<maven-javadoc-plugin>3.1.1</maven-javadoc-plugin>
 		<maven-install-plugin>3.0.0-M1</maven-install-plugin>
 
 		<!--QUALITY-->
@@ -44,6 +61,10 @@
 		<junit>4.12</junit>
 		<jacoco-maven-plugin>0.8.4</jacoco-maven-plugin>
 
+		<!--DEPLOY-->
+		<nexus-url>https://oss.sonatype.org</nexus-url>
+		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+		<nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -68,6 +89,17 @@
 		</dependency>
 
 	</dependencies>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>${nexus-url}/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>${nexus-url}/service/local/staging/deploy/maven2</url>
+		</repository>
+	</distributionManagement>
 
 	<build>
 		<pluginManagement>
@@ -138,6 +170,35 @@
 					<version>${jacoco-maven-plugin}</version>
 				</plugin>
 
+				<plugin>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<groupId>org.apache.maven.plugins</groupId>
+					<version>${maven-gpg-plugin.version}</version>
+					<configuration>
+						<keyname>gullerya@gmail.com</keyname>
+					</configuration>
+					<executions>
+						<execution>
+							<id>sign-artifacts</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>sign</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<artifactId>nexus-staging-maven-plugin</artifactId>
+					<groupId>org.sonatype.plugins</groupId>
+					<version>${nexus-staging-maven-plugin.version}</version>
+					<extensions>true</extensions>
+					<configuration>
+						<serverId>ossrh</serverId>
+						<nexusUrl>${nexus-url}</nexusUrl>
+						<autoReleaseAfterClose>false</autoReleaseAfterClose>
+					</configuration>
+				</plugin>
+
 			</plugins>
 		</pluginManagement>
 
@@ -148,6 +209,23 @@
 				<executions>
 					<execution>
 						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<version>${maven-javadoc-plugin}</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<excludePackageNames>com.gullerya.cluster.tasks.impl</excludePackageNames>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
 						<goals>
 							<goal>jar</goal>
 						</goals>
@@ -231,6 +309,30 @@
 								</configuration>
 							</execution>
 						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>deploy</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-source-plugin</artifactId>
+						<groupId>org.apache.maven.plugins</groupId>
+					</plugin>
+					<plugin>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<groupId>org.apache.maven.plugins</groupId>
+					</plugin>
+					<plugin>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<groupId>org.apache.maven.plugins</groupId>
+					</plugin>
+					<plugin>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<groupId>org.sonatype.plugins</groupId>
 					</plugin>
 				</plugins>
 			</build>
