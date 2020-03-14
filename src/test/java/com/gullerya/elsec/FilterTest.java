@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpFilter;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,11 +52,6 @@ public class FilterTest {
 		@Override
 		public String getPass() {
 			return "pass-phrase";
-		}
-
-		@Override
-		public String getSalt() {
-			return "salt-phrase";
 		}
 	}
 }

@@ -19,6 +19,30 @@ abstract class SessionsManagerBaseImpl implements SessionsManager {
 		this.configurer = configurer;
 	}
 
+	@Override
+	public String serializeSession(SecuritySession session) {
+		return "u:" + session.getUserId() + ",r:" + session.getRoles();
+	}
+
+	@Override
+	public SecuritySession deserializeSession(String input) {
+		Long userId = null, roles = null;
+		String[] parts = input.split(",");
+		for (String pair : parts) {
+			String[] keyVal = pair.split(":");
+			if ("u".equals(keyVal[0])) {
+				userId = Long.parseLong(keyVal[1]);
+			} else if ("r".equals(keyVal[0])) {
+				roles = Long.parseLong(keyVal[1]);
+			}
+		}
+		if (userId != null && roles != null) {
+			return new SecuritySessionImpl(userId, roles);
+		} else {
+			return null;
+		}
+	}
+
 	String getSecurityCookieValue(HttpServletRequest request) {
 		if (request == null) {
 			throw new IllegalArgumentException("request MUST NOT be NULL");

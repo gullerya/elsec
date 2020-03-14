@@ -5,6 +5,7 @@ import com.gullerya.elsec.api.PrincipalsManager;
 import com.gullerya.elsec.api.SessionsManager;
 
 public interface SecurityConfigurationSPI {
+	String DEFAULT_SECURITY_COOKIE_NAME = "dscn";
 
 	PrincipalsManager getPrincipalsManager();
 
