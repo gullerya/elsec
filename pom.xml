@@ -144,6 +144,23 @@
 					<version>${maven-source-plugin}</version>
 				</plugin>
 				<plugin>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<groupId>org.apache.maven.plugins</groupId>
+					<version>${maven-javadoc-plugin}</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+						<excludePackageNames>com.gullerya.cluster.tasks.impl</excludePackageNames>
+					</configuration>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
 					<artifactId>maven-install-plugin</artifactId>
 					<groupId>org.apache.maven.plugins</groupId>
 					<version>${maven-install-plugin}</version>
@@ -209,23 +226,6 @@
 				<executions>
 					<execution>
 						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<groupId>org.apache.maven.plugins</groupId>
-				<version>${maven-javadoc-plugin}</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-					<excludePackageNames>com.gullerya.cluster.tasks.impl</excludePackageNames>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
 						<goals>
 							<goal>jar</goal>
 						</goals>
