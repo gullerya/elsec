@@ -8,6 +8,19 @@
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
+	<name>Enterprise Level Security Easy (ELSEC)</name>
+	<description>Tasks management, distribution and execution service, working in cluster aware fashion, providing
+		queue-like functionality, embedded.
+	</description>
+	<url>https://github.com/gullerya/elsec</url>
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
 	<properties>
 
 		<!--DEPENDENCIES-->
