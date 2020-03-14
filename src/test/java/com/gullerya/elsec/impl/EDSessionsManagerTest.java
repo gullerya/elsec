@@ -58,4 +58,20 @@ public class EDSessionsManagerTest {
 		Assert.assertEquals(s.getUserId(), decsB.getUserId());
 		Assert.assertEquals(s.getRoles(), decsB.getRoles());
 	}
+
+	@Test
+	public void testEncryptionSymmetry() throws Exception {
+		SecuritySession s = new SecuritySessionImpl(200000, 40000);
+		EDSessionsManagerImpl smA = (EDSessionsManagerImpl) new SecurityConfigurationDefault("cn", "passlongpasslongmore").getSessionsManager();
+		EDSessionsManagerImpl smB = (EDSessionsManagerImpl) new SecurityConfigurationDefault("cn", "passlongpasslongmore").getSessionsManager();
+
+		String encs = smA.encryptSession(s);
+		Assert.assertNotNull(encs);
+		Assert.assertFalse(encs.isEmpty());
+
+		SecuritySession decs = smB.decryptSession(encs);
+		Assert.assertNotNull(decs);
+		Assert.assertEquals(s.getUserId(), decs.getUserId());
+		Assert.assertEquals(s.getRoles(), decs.getRoles());
+	}
 }

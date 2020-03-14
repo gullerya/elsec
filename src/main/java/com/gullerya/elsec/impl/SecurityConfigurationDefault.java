@@ -21,11 +21,11 @@ public class SecurityConfigurationDefault implements SecurityConfigurationSPI {
 	}
 
 	protected SecurityConfigurationDefault(String cookieName, String pass) throws Exception {
+		this.cookieName = cookieName;
+		this.pass = pass;
 		principalsManager = new PrincipalsManagerImpl();
 		sessionsManager = new EDSessionsManagerImpl(this);
 		otpManager = new OTPManagerImpl();
-		this.cookieName = cookieName;
-		this.pass = pass;
 	}
 
 	private SecurityConfigurationDefault(SecurityConfigurationSPI customSPI) throws Exception {
@@ -37,11 +37,11 @@ public class SecurityConfigurationDefault implements SecurityConfigurationSPI {
 	}
 
 	private SecurityConfigurationDefault(String cookieName, String pass, SecurityConfigurationSPI customSPI) throws Exception {
+		this.cookieName = cookieName;
+		this.pass = pass;
 		principalsManager = customSPI.getPrincipalsManager() != null ? customSPI.getPrincipalsManager() : new PrincipalsManagerImpl();
 		sessionsManager = customSPI.getSessionsManager() != null ? customSPI.getSessionsManager() : new EDSessionsManagerImpl(this);
 		otpManager = customSPI.getOTPManager() != null ? customSPI.getOTPManager() : new OTPManagerImpl();
-		this.cookieName = cookieName;
-		this.pass = pass;
 	}
 
 	@Override

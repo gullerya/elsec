@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -25,8 +24,7 @@ import java.util.UUID;
 class EDSessionsManagerImpl extends SessionsManagerBaseImpl {
 	private static final Logger logger = LoggerFactory.getLogger(EDSessionsManagerImpl.class);
 	private final String passPhrase;
-	private final Cipher encCipher;
-	private final Cipher decCipher;
+	private final SecretKey key;
 
 	EDSessionsManagerImpl(SecurityConfigurationSPI configurer) throws Exception {
 		super(configurer);
@@ -37,15 +35,8 @@ class EDSessionsManagerImpl extends SessionsManagerBaseImpl {
 			passPhrase = UUID.randomUUID().toString();
 		}
 
-		long startTime = System.currentTimeMillis();
-		byte[] randomBytes = new byte[16];
-		new SecureRandom().nextBytes(randomBytes);
-		SecretKey key = generateKey(getPassPhrase().toCharArray(), randomBytes, getKeyIter(), getKeySize());
-		encCipher = Cipher.getInstance(getCipherAlgo());
-		encCipher.init(Cipher.ENCRYPT_MODE, key);
-		decCipher = Cipher.getInstance(encCipher.getAlgorithm());
-		decCipher.init(Cipher.DECRYPT_MODE, key, encCipher.getParameters().getParameterSpec(IvParameterSpec.class));
-		logger.info(this.getClass().getName() + " initialized in " + (System.currentTimeMillis() - startTime) + " ms");
+		byte[] salt = new byte[16];
+		key = generateKey(getPassPhrase().toCharArray(), salt, getKeyIter(), getKeySize());
 	}
 
 	@Override
@@ -86,24 +77,40 @@ class EDSessionsManagerImpl extends SessionsManagerBaseImpl {
 	protected String encryptSession(SecuritySession securitySession) throws Exception {
 		String serializedSession = serializeSession(securitySession);
 		int randomPadSize = getRandomPadSize();
-		byte[] decBytes = serializedSession.getBytes(StandardCharsets.UTF_8);
-		byte[] randomBytes = new byte[randomPadSize];
-		new SecureRandom().nextBytes(randomBytes);
-		byte[] allBytes = Arrays.copyOf(randomBytes, randomPadSize + decBytes.length);
-		System.arraycopy(decBytes, 0, allBytes, randomBytes.length, decBytes.length);
-		byte[] encBytes = encCipher.doFinal(allBytes);
-		return Base64.getUrlEncoder().withoutPadding().encodeToString(encBytes);
+		byte[] rnd = new byte[randomPadSize];
+		new SecureRandom().nextBytes(rnd);
+		byte[] dec = serializedSession.getBytes(StandardCharsets.UTF_8);
+		byte[] all = new byte[rnd.length + dec.length];
+		System.arraycopy(rnd, 0, all, 0, rnd.length);
+		System.arraycopy(dec, 0, all, rnd.length, dec.length);
+
+		Cipher cipher = Cipher.getInstance(getCipherAlgo());
+		cipher.init(Cipher.ENCRYPT_MODE, key);
+		byte[] enc = cipher.doFinal(all);
+		byte[] iv = cipher.getIV();
+
+		byte[] fin = new byte[enc.length + iv.length];
+		System.arraycopy(enc, 0, fin, 0, enc.length);
+		System.arraycopy(iv, 0, fin, enc.length, iv.length);
+
+		return Base64.getUrlEncoder().withoutPadding().encodeToString(fin);
 	}
 
 	protected SecuritySession decryptSession(String encryptedSession) throws Exception {
 		int randomPadSize = getRandomPadSize();
-		byte[] encBytes = Base64.getUrlDecoder().decode(encryptedSession);
-		byte[] decBytes = decCipher.doFinal(encBytes);
-		return deserializeSession(new String(decBytes, randomPadSize, decBytes.length - randomPadSize, StandardCharsets.UTF_8));
+		byte[] all = Base64.getUrlDecoder().decode(encryptedSession);
+
+		IvParameterSpec ivSpec = new IvParameterSpec(all, all.length - 16, 16);
+		Cipher cipher = Cipher.getInstance(getCipherAlgo());
+		cipher.init(Cipher.DECRYPT_MODE, key, ivSpec);
+
+		byte[] dec = cipher.doFinal(all, 0, all.length - 16);
+		String serializedSession = new String(dec, randomPadSize, dec.length - randomPadSize, StandardCharsets.UTF_8);
+		return deserializeSession(serializedSession);
 	}
 
 	private SecretKey generateKey(char[] pass, byte[] salt, int iterations, int size) throws Exception {
-		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA" + size);
+		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 		KeySpec spec = new PBEKeySpec(pass, salt, iterations, size);
 		SecretKey tmp = factory.generateSecret(spec);
 		return new SecretKeySpec(tmp.getEncoded(), "AES");
