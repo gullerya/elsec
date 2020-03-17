@@ -40,7 +40,7 @@
 	<properties>
 
 		<!--DEPENDENCIES-->
-		<slf4j-api>1.7.30</slf4j-api>
+		<slf4j>1.7.30</slf4j>
 		<javax-servlet-api>4.0.1</javax-servlet-api>
 
 		<!--BUILD-->
@@ -71,7 +71,7 @@
 		<dependency>
 			<artifactId>slf4j-api</artifactId>
 			<groupId>org.slf4j</groupId>
-			<version>${slf4j-api}</version>
+			<version>${slf4j}</version>
 		</dependency>
 		<dependency>
 			<artifactId>javax.servlet-api</artifactId>
@@ -81,6 +81,12 @@
 		</dependency>
 
 		<!--QUALITY-->
+		<dependency>
+			<artifactId>slf4j-simple</artifactId>
+			<groupId>org.slf4j</groupId>
+			<version>${slf4j}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<artifactId>junit</artifactId>
 			<groupId>junit</groupId>
