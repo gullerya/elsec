@@ -8,6 +8,8 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 public class SecurityFilter implements Filter {
 	private SecurityService securityService;
@@ -28,16 +30,20 @@ public class SecurityFilter implements Filter {
 		SecurityConfigurationSPI configuration = null;
 		String sConf = filterConfig.getInitParameter(SecurityService.SERVICE_CONFIG_KEY);
 		if (sConf != null) {
-			Class<SecurityConfigurationSPI> configurerClass;
+			Class<?> configurerClass;
 			try {
-				configurerClass = (Class<SecurityConfigurationSPI>) Class.forName(sConf);
+				configurerClass = Class.forName(sConf);
 			} catch (ClassNotFoundException cnfe) {
 				throw new ServletException("failed to initialize configuration class '" + sConf + "'", cnfe);
 			}
 			try {
-				configuration = configurerClass.newInstance();
-			} catch (IllegalAccessException | InstantiationException iae) {
-				throw new ServletException("failed to instantiate configuration class '" + sConf + "'", iae);
+				for (Constructor<?> c : configurerClass.getDeclaredConstructors()) {
+					if (c.getParameterCount() == 0) {
+						configuration = (SecurityConfigurationSPI) c.newInstance();
+					}
+				}
+			} catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
+				throw new ServletException("failed to instantiate configuration class '" + sConf + "'", e);
 			}
 		}
 

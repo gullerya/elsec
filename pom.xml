@@ -40,26 +40,26 @@
 	<properties>
 
 		<!--DEPENDENCIES-->
-		<slf4j-api>1.7.29</slf4j-api>
+		<slf4j-api>1.7.30</slf4j-api>
 		<javax-servlet-api>4.0.1</javax-servlet-api>
 
 		<!--BUILD-->
-		<java>1.8</java>
+		<java>11</java>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven-clean-plugin>3.1.0</maven-clean-plugin>
 		<maven-resources-plugin>3.1.0</maven-resources-plugin>
 		<maven-compiler-plugin>3.8.1</maven-compiler-plugin>
-		<maven-jar-plugin>3.1.2</maven-jar-plugin>
-		<maven-source-plugin>3.0.1</maven-source-plugin>
-		<maven-javadoc-plugin>3.1.1</maven-javadoc-plugin>
+		<maven-jar-plugin>3.2.0</maven-jar-plugin>
+		<maven-source-plugin>3.2.0</maven-source-plugin>
+		<maven-javadoc-plugin>3.2.0</maven-javadoc-plugin>
 		<maven-install-plugin>3.0.0-M1</maven-install-plugin>
 
 		<!--QUALITY-->
-		<maven-enforcer-plugin>3.0.0-M2</maven-enforcer-plugin>
-		<maven-surefire-plugin>3.0.0-M3</maven-surefire-plugin>
-		<spotbugs>3.1.11</spotbugs>
-		<junit>4.12</junit>
-		<jacoco-maven-plugin>0.8.4</jacoco-maven-plugin>
+		<maven-enforcer-plugin>3.0.0-M3</maven-enforcer-plugin>
+		<maven-surefire-plugin>3.0.0-M4</maven-surefire-plugin>
+		<spotbugs>4.0.0</spotbugs>
+		<junit>4.13</junit>
+		<jacoco-maven-plugin>0.8.5</jacoco-maven-plugin>
 
 		<!--DEPLOY-->
 		<nexus-url>https://oss.sonatype.org</nexus-url>
