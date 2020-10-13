@@ -58,7 +58,7 @@
 		<maven-enforcer-plugin>3.0.0-M3</maven-enforcer-plugin>
 		<maven-surefire-plugin>3.0.0-M4</maven-surefire-plugin>
 		<spotbugs>4.0.0</spotbugs>
-		<junit>4.13</junit>
+		<junit>4.13.1</junit>
 		<jacoco-maven-plugin>0.8.5</jacoco-maven-plugin>
 
 		<!--DEPLOY-->
